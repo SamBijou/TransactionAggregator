@@ -1,0 +1,34 @@
+<div class="container">
+    <h2>Recherche de chaîne de transaction</h2>
+    <form (submit)="$event.preventDefault(); searchChain()">
+        <input [(ngModel)]="searchId" name="searchId" placeholder="Entrez un ID de transaction" required>
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <div *ngIf="transactions.length">
+        <h3>Chaîne de transactions :</h3>
+        <table class="transaction-table">
+            <thead>
+            <tr>
+                <th>Événement</th>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Anomalie</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let t of transactions; let i = index">
+                <td>{{ t.eventType }}</td>
+                <td>{{ t.primaryId }}</td>
+                <td>{{ formatDate(t.date) }}</td>
+                <td *ngIf="i > 0 && isDateBefore(t.date, transactions[i - 1].date)">
+                    <span style="color: red;">⚠️ Date antérieure</span>
+                </td>
+                <td *ngIf="i === 0 || !isDateBefore(t.date, transactions[i - 1].date)">
+                    ✔️
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
